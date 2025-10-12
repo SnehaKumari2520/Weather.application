@@ -1,0 +1,223 @@
+.weather{
+    place-self: center;
+    padding:40px;
+    border-radius : 10px;
+    background-image: linear-gradient(45deg, #8d7ad8, #b25cec);
+    display:flex;
+    flex-direction:column;
+    align-items: center;
+}
+.search-bar{
+    display:flex;
+    align-items : center;
+    gap:10px; 
+    margin-bottom:20px;
+    
+
+}
+.search-bar input{
+    height: 50px;
+    border: none;
+    outline:none; 
+    border-radius:40px;
+    padding-left:25px;
+    color:#211a1a;
+    background:#f1f2f2;
+    font-size:18px;
+
+}
+.search-bar button{
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+    border: none;
+    background:#f6f9fa;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.weather-icon{
+    height:150px;
+    width:150px;
+    margin:20px;
+}
+.temperature{
+    color: #fff;
+    font-size: 40px;
+
+}
+.weather-data{
+     width: 100%;
+    margin-top:20px;
+    display:flex;
+    justify-content: space-between;
+    color:#fff; 
+
+}
+
+.weather-data .col{
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    font-size: 16px;
+}
+.weather-data .col span{
+    display:block;
+    font-size: 14px;
+    margin-top: -5px;
+
+
+/* overlays */
+.weather-overlay{
+    position:fixed;
+    left:0; right:0; top:0; bottom:0;
+    pointer-events:none;
+    z-index:4; /* above background but below the weather card (card is z-index:3) */
+}
+
+/* rain: subtle falling lines */
+.weather-overlay.rain{
+    background-image: linear-gradient(transparent 60%, rgba(255,255,255,0.06) 61%);
+    background-size: 3px 100px;
+    opacity:0.6;
+    animation: rain-move 1s linear infinite;
+}
+@keyframes rain-move{
+    from{ background-position:0 0 }
+    to{ background-position:0 100% }
+}
+
+/* snow: floating dots */
+.weather-overlay.snow{
+    background-image: radial-gradient(circle, rgba(255,255,255,0.9) 0.8px, transparent 1px);
+    background-size: 12px 12px;
+    opacity:0.9;
+    animation: snow-fall 6s linear infinite;
+}
+@keyframes snow-fall{
+    from{ background-position:0 -10% }
+    to{ background-position:0 110% }
+}
+
+/* ensure the weather card is above overlays */
+.weather{ position:relative; z-index:3 }
+
+/* CLOUDS */
+.weather-overlay.clouds{ pointer-events:none; z-index:2 }
+.weather-overlay.clouds .cloud{
+    position:fixed; top:12vh; left:-20%; width:180px; height:60px; background: rgba(255,255,255,0.9); border-radius:40px; filter: blur(1px); opacity:0.95;
+}
+.weather-overlay.clouds .cloud.c1{ top:8vh; left:-30%; transform: scale(1.05); animation: cloud-drift-1 28s linear infinite; }
+.weather-overlay.clouds .cloud.c2{ top:18vh; left:-10%; width:220px; height:72px; transform: scale(0.9); opacity:0.85; animation: cloud-drift-2 36s linear infinite; }
+.weather-overlay.clouds .cloud::before, .weather-overlay.clouds .cloud::after{ content:''; position:absolute; background:inherit; width:60px; height:60px; border-radius:50%; top:-18px; left:18px; }
+.weather-overlay.clouds .cloud::after{ left:80px; top:-10px; width:80px; height:80px; }
+@keyframes cloud-drift-1{ from{ left:-30% } to{ left:110% } }
+@keyframes cloud-drift-2{ from{ left:-20% } to{ left:120% } }
+
+/* WIND - floating leaves */
+.weather-overlay.wind{ pointer-events:none; z-index:2 }
+.weather-overlay.wind .leaf{
+    position:fixed; top:40vh; left:-5vw; width:18px; height:10px; background: linear-gradient(90deg,#a2c45a,#6aa84f); border-radius:50%; transform-origin:center; opacity:0.95;
+}
+.weather-overlay.wind .l1{ animation: leaf-float-1 5.6s cubic-bezier(.3,.7,.2,.9) infinite; }
+.weather-overlay.wind .l2{ top:48vh; animation: leaf-float-2 6.8s cubic-bezier(.3,.7,.2,.9) infinite; left:-10vw }
+@keyframes leaf-float-1{
+    0%{ transform: translate(0,0) rotate(0deg); left:-8vw; opacity:0 }
+    10%{ opacity:1 }
+    50%{ transform: translate(70vw,-18vh) rotate(25deg); left:70vw }
+    100%{ transform: translate(140vw,-36vh) rotate(55deg); left:140vw; opacity:0 }
+}
+@keyframes leaf-float-2{
+    0%{ transform: translate(0,0) rotate(-10deg); left:-12vw; opacity:0 }
+    15%{ opacity:1 }
+    50%{ transform: translate(56vw,-14vh) rotate(-35deg); left:56vw }
+    100%{ transform: translate(120vw,-28vh) rotate(-70deg); left:120vw; opacity:0 }
+}
+
+/* STORM - lightning bolt */
+.weather-overlay.storm{ pointer-events:none; z-index:2 }
+.weather-overlay.storm .bolt{
+    position:fixed; top:18vh; left:50vw; width:6px; height:80px; background: linear-gradient(#fff7b2,#ffd54d); transform-origin:top left; opacity:0; box-shadow: 0 0 12px rgba(255,220,80,0.9);
+    animation: bolt-flash 3.6s linear infinite;
+}
+@keyframes bolt-flash{
+    0%{ opacity:0; transform: translateY(-10px) rotate(10deg) scaleY(0.8) }
+    5%{ opacity:1 }
+    10%{ opacity:0.95; transform: translateY(0) rotate(-6deg) scaleY(1) }
+    12%{ opacity:0 }
+    100%{ opacity:0 }
+}
+
+/* sun overlay for sunny days */
+.weather-overlay.sun{ pointer-events:none; z-index:2 }
+.weather-overlay.sun .sun{
+    position:fixed;
+    top:10vh;
+    left:5vw;
+    width:72px;
+    height:72px;
+    background: radial-gradient(circle at 35% 30%, #fff59d 0%, #ffd54d 40%, #ffb300 100%);
+    border-radius:50%;
+    box-shadow: 0 8px 18px rgba(255,173,51,0.28);
+    transform-origin:center;
+    animation: sun-drift 10s ease-in-out infinite, sun-bob 4s ease-in-out infinite;
+}
+.weather-overlay.sun .sun::before,
+.weather-overlay.sun .sun::after{
+    content:''; position:absolute; left:50%; transform:translateX(-50%);
+}
+/* eyes */
+.weather-overlay.sun .sun::before{
+    top:36%; width:8px; height:8px; background:#663300; border-radius:50%; box-shadow: -14px 0 0 #663300, 14px 0 0 #663300;
+}
+/* smile */
+.weather-overlay.sun .sun::after{
+    top:54%; width:36px; height:18px; border-bottom:4px solid #663300; border-radius:0 0 40px 40px; transform:translateX(-50%);
+}
+@keyframes sun-drift{
+    0%{ left:5vw }
+    50%{ left:60vw }
+    100%{ left:5vw }
+}
+@keyframes sun-bob{
+    0%{ transform: translateY(0) }
+    50%{ transform: translateY(-12px) }
+    100%{ transform: translateY(0) }
+}
+
+@media (max-width:420px){
+    .weather-overlay.sun .sun{ width:56px; height:56px; top:8vh }
+}
+
+/* debug buttons */
+.debug button{ padding:6px 8px; border-radius:6px; border:none; cursor:pointer; background:#fff; }
+.debug button:hover{ filter:brightness(.95) }
+}
+.weather-data .col img{
+    height: 30px;
+    margin-top: 20px;
+    width: 30px;
+}
+
+.loading{
+    color:#fff;
+    margin:8px 0;
+}
+
+.error{
+    color:#ffdddd;
+    background:rgba(255,0,0,0.15);
+    padding:6px 8px;
+    border-radius:6px;
+    margin-bottom:8px;
+}
+
+.debug{
+    width:100%;
+    margin-top:12px;
+}
+
+
+
